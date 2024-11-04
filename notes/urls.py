@@ -1,7 +1,8 @@
 from django.urls import path
 
-from . import views
+from notes.views import NoteListView, NoteDetailView
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('notes/', NoteListView.as_view(), name='note_list'),
+    path('notes/<uuid:pk>/', NoteDetailView.as_view(), name='note_detail'),
 ]

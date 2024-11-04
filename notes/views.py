@@ -1,5 +1,23 @@
-from django.http import HttpResponse
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from notes.models import Note
+from notes.serializers import NoteSerializer
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the notes index.")
+class NoteListView(generics.ListCreateAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(author=self.request.user)
