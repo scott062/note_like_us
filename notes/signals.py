@@ -1,8 +1,7 @@
-import requests
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from notes.models import Note
-from note_like_us.settings import SENTIMENT_API_TOKEN
+from transformers import pipeline
 
 
 @receiver(post_save, sender=Note)
@@ -14,26 +13,20 @@ def calculate_sentiment_score(sender, instance, created, **kwargs):
     if hasattr(instance, '_dirty'):
         return
 
-    api_url = "https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"
-    payload = {
-        "inputs": instance.content,
-    }
-    headers = {"Authorization": f"Bearer {SENTIMENT_API_TOKEN}"}
-
     try:
-        instance._dirty = True
-        response = requests.post(api_url, headers=headers, json=payload)
-        response.raise_for_status()
+        instance._dirty = True # Avoid recursive loop on post_save
 
-        scores = parse_scores_response(response.json()[0])
+        pipe = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
+        result = pipe(instance.content, top_k=3)
+        scores = parse_scores_response(result)
 
         Note.objects.filter(id=instance.id).update(
                 negative_sentiment=scores[0],
                 neutral_sentiment=scores[1],
                 positive_sentiment=scores[2]
             )
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching sentiment score: {e}")
+    except Exception as e:
+        print(f"Error calculating sentiment score: {e}")
     finally:
         del instance._dirty
 

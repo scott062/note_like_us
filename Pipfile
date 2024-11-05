@@ -11,6 +11,7 @@ djangorestframework = "*"
 requests = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
+transformers = {extras = ["torch"], version = "*"}
 
 [dev-packages]
 
