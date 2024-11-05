@@ -9,6 +9,8 @@ django-environ = "*"
 psycopg = "*"
 djangorestframework = "*"
 requests = "*"
+django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
