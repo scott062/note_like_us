@@ -21,3 +21,4 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
+

@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from notes.models import Note
 from note_like_us.settings import SENTIMENT_API_TOKEN
 
+
 @receiver(post_save, sender=Note)
 def calculate_sentiment_score(sender, instance, created, **kwargs):
     if not instance:
@@ -25,6 +26,7 @@ def calculate_sentiment_score(sender, instance, created, **kwargs):
         response.raise_for_status()
 
         scores = parse_scores_response(response.json()[0])
+
         Note.objects.filter(id=instance.id).update(
                 negative_sentiment=scores[0],
                 neutral_sentiment=scores[1],
