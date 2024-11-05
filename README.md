@@ -33,4 +33,4 @@ docker-compose up
 
 If everything is running properly, you should be able to access the running django service at localhost:8000. You can curl, use postman, or access the django admin site to begin quickly testing endpoints.
 
-Otherwise, you can setup a lightweight react frontend at this link:  
+Otherwise, you can setup a lightweight react frontend at this link: https://github.com/scott062/note_like_us_frontend.
