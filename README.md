@@ -9,10 +9,8 @@ POSTGRES_USER
 POSTGRES_PASSWORD
 DATABASE_HOST
 DATABASE_PORT
-SENTIMENT_API_TOKEN
 ```
 Notes:
-* See https://huggingface.co/settings/tokens to setup token for sentiment API (Requires account)
 * Database is POSTGRES, but can be swapped with minor config changes in settings.py
 
 ## Running API (Docker-Compose)
