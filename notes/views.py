@@ -9,7 +9,7 @@ class NoteListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Note.objects.filter(author=self.request.user)
+        return Note.objects.filter(author=self.request.user).order_by('-updated_at', '-created_at')
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -21,3 +21,4 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
+
